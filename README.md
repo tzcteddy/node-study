@@ -88,22 +88,24 @@
             console.log(require.cache[require.resolve("./app.js")]);
             使用delete删除缓存区缓存的某个模块对象
             delete require.cache[require.resolve("./app.js")];
-- 6、__filename和__dirname
+#### 2.3、__filename和__dirname
 
-        1、__filename
+- 1、__filename
+
         在任何模块文件内部，可以使用__filename变量获取当前模块文件的带有完整绝对路径的文件名
         app.js中输入：console.log(__filename);
         REPL环境：app=require('./app.js');
         输出：E:\personalfile\node\miao\node-study\app.js
-        2、__dirname
+- 2、__dirname
+
         在任何模块文件内部，可以使用__dirname变量获取当前模块文件所在目录的完整绝对路径
         app.js中输入：console.log(__filename);
         REPL环境：app=require('./app.js');
         输出：E:\personalfile\node\miao\node-study
         
-- 7、事件处理机制
+#### 2.4、事件处理机制
         
-    1.EventEmitter类：
+- 1.EventEmitter类：
     
 |方法与参数 |描述 |
 | :-------- | :--------|
@@ -114,5 +116,55 @@
  |removeAllListeners([event])|对指定事件解除所有事件处理函数|
  |setMaxListeners(n)|指定事件处理函数的最大数量。n为整数值|
  |listeners(event)|获取指定事件所有的事件处理函数|
- |emit(event,[arg1],[arg2],[...])|手工触发指定事件|      
+ |emit(event,[arg1],[arg2],[...])|手工触发指定事件|
+ |EventEmitter.listenerCount(emitter,event)|类自身拥有的方法，获取指定事件的事件处理函数的数量|  
+ 
+#### 2.5在Node.js中使用调试器
+
++ 1、在命令窗口使用**node debug app.js**命令调试文件
+        
+        在Node.js中提供了一个可以通过简单TCP协议来访问的调试器。在使用"node debug"命令后，首先链接该调试器，当调试器可以使用后，命令窗口出现一个"debugger"命令提示符，后跟ok；
+        接下来，Node.js将在脚本文件的第一行可运行代码之前暂停脚本文件的执行，命令行窗口出现"break in"+脚本文件完整文件名+":"+可运行代码的行序号，用于标识脚本代码中的暂停位置；
+        
++ 2、"cont"或"c"命令，("continue"的简写)
+ 
+        如果需要执行当前被暂停执行的脚本，可在debug命令后输入"cont"或"c"命令，继续执行剩余脚本代码。
+        
++ 3、"next"或"n"命令
+    
+        如果不需要执行完剩余所有脚本代码，可以在debug命令后输入"next"或"n"命令，将程序执行到下一句可执行代码之前。
+        
++ 4、"step"或"s"命令
+
+        由于next命令以一句可执行代码为一个单位，因此在执行"var i=foo();"这种调用函数的代码时，调试器不会进入到函数内部，而是直接显示返回的结果，输入"step"或"s"后，程序将暂停在函数内第一行代码之前，可继续使用"next"逐行执行。
+        
++ 5、"out"或"o"命令
+
+        在函数内部逐行执行的时候，可以使用"out"或"o"命令立即执行完函数内剩余所有代码，程序将被暂停在调用该函数的代码之后的下一句代码之前。
+        
++ 6、watch("观察时使用的表达式")
++ 7、watchers：查看所有观察表达式的运行结果或变量的变量值
++ 8、unwatch("观察时使用的表达式")：解除观察
++ 9、setBreakpoint(filename,line)或sb(filename,line)设置断点
+
+        第一个参数用于指定需要设置断点的脚本文件名，第二个参数用于指定将断点设置在第几行。
+        
++ 10、clearBreakpoint(filename,line)或cb(filename,line)取消断点
++ 11、backtrace或bt
+
+        当使用调试器在深层函数内部进行调试的时候，可以使用backtrace或bt命令查看该函数及其外层各函数的返回位置，包括返回代码的行号及起始字符所在位置。
+        
++ 12、list
+
+        调试过程中使用list查看所要执行代码之前或之后的几行代码。
+        
++ 13、repl 从调试进入到REPL运行环境
++ 14、restart 重新开始脚本调试
++ 15、kill 终止脚本文件调试
++ 16、run kill终止后，可以使用run命令重新开始脚本文件调试
++ 17、scripts 查看当前正在运行的文件及所有被加载的模块文件名称(不包含Node.js的内置模块)。
++ 18、version 显示Node.js引擎版本号
+ 
+    
+    
         
