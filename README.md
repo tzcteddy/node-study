@@ -89,3 +89,30 @@
             使用delete删除缓存区缓存的某个模块对象
             delete require.cache[require.resolve("./app.js")];
 - 6、__filename和__dirname
+
+        1、__filename
+        在任何模块文件内部，可以使用__filename变量获取当前模块文件的带有完整绝对路径的文件名
+        app.js中输入：console.log(__filename);
+        REPL环境：app=require('./app.js');
+        输出：E:\personalfile\node\miao\node-study\app.js
+        2、__dirname
+        在任何模块文件内部，可以使用__dirname变量获取当前模块文件所在目录的完整绝对路径
+        app.js中输入：console.log(__filename);
+        REPL环境：app=require('./app.js');
+        输出：E:\personalfile\node\miao\node-study
+        
+- 7、事件处理机制
+        
+    1.EventEmitter类：
+    
+|方法与参数 |描述 |
+| :-------- | :--------|
+|addListener(event,listener)|对指定事件绑定事件处理函数|
+ |on(event,listener)|对指定事件绑定事件处理函数,(addListener方法的别名)|
+ |once(event.listener)|对指定事件指定只执行一次的事件处理函数| 
+ |removeListener(event,listener)|对指定事件解除事件处理函数|
+ |removeAllListeners([event])|对指定事件解除所有事件处理函数|
+ |setMaxListeners(n)|指定事件处理函数的最大数量。n为整数值|
+ |listeners(event)|获取指定事件所有的事件处理函数|
+ |emit(event,[arg1],[arg2],[...])|手工触发指定事件|      
+        
