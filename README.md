@@ -53,7 +53,7 @@
         用于对一个表达式的执行结果进行评估，如果执行结果为false，则输出一个消息字符串，并抛出AssertionError异常。
         console.assert(1==2,"raise an exception")
         
- ####2.2、Node.js中的全局作用域和全局函数
+ #### 2.2、Node.js中的全局作用域和全局函数
 - 1、global：Node.js全局命名空间
 - 2、setTimeout函数和clearTimeout函数
  
