@@ -164,6 +164,92 @@
 + 16、run kill终止后，可以使用run命令重新开始脚本文件调试
 + 17、scripts 查看当前正在运行的文件及所有被加载的模块文件名称(不包含Node.js的内置模块)。
 + 18、version 显示Node.js引擎版本号
+
+### 三、模块与npm包管理工具
+
+#### 1、exports与module.exports
+- 1、使用exports对象
+
+        foo.js
+        var name="tzc";
+        var getName=function(){
+            return name
+        };
+        exports.name=name;
+        exports.getName=getName;
+        模块外访问
+        var foo=require("./foo.js");
+        console.log(foo.name);
+        console.log(foo.getName());:
+        
+- 2、模块定义为类
+
+        在文件中也可以将exports对象书写为module.exports，但是在需要将模块定义为一个类时，只能使用module.exports的书写方式
+        
+#### 2、组织与管理模块
+
+- 1、从node_modules目录中加载模块
+
+        如果在require函数中只是用指定文件名，但不指定路径，
+        如：require("bar.js");
+        Node.js将该文件视为node_modules目录下的一个文件；
+        "/home/ry/project/node_modules/app.js"中使用require("bar.js")；模块使用的加载路径依次为：
+        "/home/ry/project/node_modules/bar.js"
+        "/home/ry/node_modules/bar.js"
+        "/home/node_modules/bar.js"
+        "/node_modules/bar.js"
+        
+- 2、使用目录来管理模块
+
+        在Node.js中可以将目录名指定为模块名，以便通过目录来管理模块，只需为该目录指定一个入口点；
+        方法一、在应用程序的根目录下创建一个node_modules子目录，然后在其中为模块创建一个目录，并且在其中放入一个index.js;
+        方法二、更灵活，在应用程序根目录下的node_modules子目录下创建一个package.json文件，并且在其中使用一下代码创建模块名与主文件：
+        {
+            "name":"foo",
+            "main":"./lib/foo.js"
+        }
+        当使用var foo=require("foo")加载foo模块的时候，将加载foo子目录下的lib目录下的foo.js模块文件
+        
+- 3、模块对象的属性
+
+        1、module.id
+            属性值为当前模块的ID，主模块的id为"."，其他为该模块文件的绝对路径，文件中可修改当前模块id
+        2、module.filename
+            属性值为当前模块的文件袋的文件名
+        3、module.loaded
+            属性值为布尔值，false表示模块尚未加载完毕
+        4、module.parent
+            属性值为当前模块的父模块对象，即调用当前模块的模块对象
+        5、module.children
+            属性值为一个数组，存放了当前模块的所有子模块对象，即当前模块中已加载的所有模块对象
+
+- 4、包与npm包管理工具
+
+        1、Node.js中的包
+        
+            一个包事实上就是一个目录，通常包含如下所示一些内容：
+            1）在包的根目录中存放package.json文件
+            2）在bin子目录中存放二进制文件
+            3）在lib子目录中存放javascript文件
+            4）在doc子目录下存放对包或包的使用方法进行说明的文档文件
+            5）在test目录中存放一些对包进行单元测试用的文件
+            一个package.json文件中通常包含的字段及其作用如下：
+            1）name:包名，唯一的，由小写字母、下划线和数字组成，不含空格
+            2）preferglobal：是否支持全局安装，true为支持
+            3）description:包说明
+            4）version:版本号
+            5）author:作者信息数组 name email字段
+            6）maintainers:包的维护者信息数组
+            7）bugs:bug的提交地址
+            8）licenses:许可证数组，type许可证名称 url许可证文本链接
+            9）repository:仓库托管地址数组 type:git url:地址
+            10）keywords:关键字数组
+            11）dependencies:本包所依赖的包
+            
+### 四、使用Buffer类处理二进制数据
+
+
+        
  
     
     
