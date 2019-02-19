@@ -321,10 +321,54 @@
     由于Buffer对象的slice方法并不是复制缓存区的数据，而是与该数据共享内存区域，因此，如果修改使用slice方法取出的数据，则缓存中的数据也将被修改；
     
 #### 4.3、Buffer对象与字符串对象之间的互相转换
+- 1、Buffer对象的toString方法
 
 
+     buf.toString([encoding],[start],[end])
+    在Buffer的toString方法中可以使用三个可选参数，其中第一个用于指定Buffer对象中保存的文字编码格式，默认是utf8；第二个及第三个用于指定被转换数据的起始位置与终止位置，以字节为单位。
+- 2、Buffer对象的write方法
 
 
+    buf.write(string,[offset],[length],[encoding])
+    在Buffer的write方法中使用四个参数，其中一个参数为必须指定参数，指定需要写入的字符串，后三个为可选参数；第二个参数offset与第三个参数length用于指定字符串转换为字节数据后的写入位置，字节数据的书写位置为从第1+offset个字节开始到offset+length个字节为止；
+    第四个参数指定写入字符串时使用的编码格式，默认为utf8格式。
+
+- 3、StringDecoder
+
+
+    var StringDecoder=require("string_decoder").StringDecoder;
+    var decoder=new StringDecoder([encoding])
+    decoder.write(buffer);
+    StringDecoder对象的write方法，可以使用一个参数，用于指定需要被转换的Buffer对象，该方法返回转换后的字符串。
+#### 4.4、Buffer对象与数值对象之间的互相转换
+
+#### 4.5、Buffer对象与JSON对象之间的互相转换
+
+
+    在Node.js中，可以使用JSON.stringify方法将Buffer对象中保存的数据转换为一个字符串，也可以使用JSON.parse方法
+    将一个经过转换后的字符串还原为一个数组
+    > var buf=new Buffer("元宵节快乐")
+    > var json=JSON.stringify(buf)
+    > json
+    '{"type":"Buffer","data":[229,133,131,229,174,181,232,138,130,229,191,171,228,185,144]}'
+    > JSON.parse(json)
+    { type: 'Buffer',
+      data:
+       [ 229, 133, 131, 229, 174, 181, 232, 138, 130, 229, 191, 171, 228, 185, 144 ] }
+    > var copy=new Buffer(JSON.parse(json).data)
+    > copy
+    <Buffer e5 85 83 e5 ae b5 e8 8a 82 e5 bf ab e4 b9 90>
+    > copy.toString()
+    '元宵节快乐'
+#### 4.5、复制缓存数据
+
+    
+    buf.copy(targetBufer,[targetStart],[sourceStart],[sourceEnd])
+    当需要将Buffer对象中保存的二进制数据复制到另一个Buffer对象中时，可以使用Buffer对象的copy方法
+    第一个参数为必须指定的参数，用于指定复制的目标Buffer对象；
+    第二个参数用于指定目标Buffer对象中从第几个字节开始写入数据，参数值为一个小于目标Buffer对象长度的整数值，默认值0(从开始处写入数据)；
+    第三个参数用于指定从复制源Buffer对象中获取数据时的开始位置，默认为0，即从复制源的第一个字节开始获取；
+    第四个参数用于指定从复制源Buffer中获取数据时的结束位置，默认是复制源Buffer对象的长度。
         
  
     
