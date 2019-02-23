@@ -8,7 +8,6 @@ let sucCount=0;
 
 let singermid="0025NhlN2yWrP4";//周杰伦
 /**生成获取专辑信息列表的地址
- * @param ucgi
  * @param singermid 区分歌手的标识
  * */
 function createGetAlbumUrl(singermid){
@@ -23,7 +22,7 @@ function createGetAlbumUrl(singermid){
         "singermid":singermid,
         "order":"time",
         "begin":0,
-        "num":5,
+        "num":30,
         "exstatus":1
       },
       "module":"music.web_singer_info_svr"
@@ -57,7 +56,7 @@ function dealSongVkey(songvkey,info) {
    let url=songvkey.req.data.freeflowsip[1]+songvkey.req_0.data.midurlinfo[0].purl;//有时文件地址域名不同，所以使用拼接
 
   request({url,encoding:null},function (err,response,body) {
-      write.writeFile(dataDirPath+info.albumName+"/",info.songName,"m4a",body,function (err) {
+      write.writeFile(dataDirPath+info.albumName+"/",info.songName,"m4a",body,true,function (err) {
           if(err){
             console.log(err);
           }else {
@@ -67,7 +66,7 @@ function dealSongVkey(songvkey,info) {
               console.log("任务完成");
             }
           }
-        },true)
+        })
       });
 }
 /*找vkey的地址  */
@@ -137,7 +136,7 @@ function getMusicList(musicInfo){
 function loopDealAlbum(albumList) {
    albumList.forEach((item,index)=>{//循环专辑创建专辑文件夹
        if(true){
-         write.makeDirectory(dataDirPath,item.album_name,(err)=>{
+         write.makeDirectory(dataDirPath,item.album_name,true,(err)=>{
            if(err){
              //console.log(err);
 
@@ -149,7 +148,7 @@ function loopDealAlbum(albumList) {
            }
            read.getData(createGetMusicList(item.album_mid),getMusicList);
 
-         },true);
+         });
        }
    })
 }
@@ -158,6 +157,4 @@ function getAlbumList(albumInfo){
   let albumList=albumInfo.singerAlbum.data.list;
   loopDealAlbum(albumList);
 };
-
-
 read.getData(createGetAlbumUrl(singermid),getAlbumList);

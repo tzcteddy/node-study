@@ -9,7 +9,7 @@ module.exports={
    * @param callback 回调函数
    * @param async  是否异步创建 true异步
   * */
-  makeDirectory:function (dirPath,dirName,callback,async) {
+  makeDirectory:function (dirPath,dirName,async,callback) {
     if(dirPath.slice(dirPath.length-1)!=="/") dirPath+="/";
     if(async){
       fs.mkdir(dirPath+dirName,callback);
@@ -25,12 +25,12 @@ module.exports={
    * @param async   是否异步 true异步
    * */
 
-  writeFile: async function (path,name,type,data,callback,async) {
+  writeFile: async function (path,name,type,data,async,callback,encoding) {
     if(path.slice(path.length-1)!=="/") path+="/";
     if(async){
-      fs.writeFile(path+name+"."+type,data,callback);
+      fs.writeFile(path+name+"."+type,data,encoding,callback);
     }else {
-      fs.writeFileSync(path+name+"."+type,data);
+      fs.writeFileSync(path+name+"."+type,data,encoding);
     }
   }
 };
