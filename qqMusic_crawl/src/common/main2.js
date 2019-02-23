@@ -1,15 +1,14 @@
 let write=require("./write");
 let read=require("./read");
 let request=require("request");
-let dataDirPath="E://personalfile/node/crawl/src/data/";
+let dataDirPath="E://personalfile/node/crawl/src/data/li/";
 let mkDirCount=0;
 let fileCount=0;
 let sucCount=0;
-
-let singermid="0025NhlN2yWrP4";//周杰伦
+let singermid="000aHmbL2aPXWH";//李荣浩
 /**生成获取专辑信息列表的地址
  * @param ucgi
- * @param singermid 区分歌手的标识
+ * @param singermid  区分歌手专辑的标识
  * */
 function createGetAlbumUrl(singermid){
   let json={
@@ -23,7 +22,7 @@ function createGetAlbumUrl(singermid){
         "singermid":singermid,
         "order":"time",
         "begin":0,
-        "num":5,
+        "num":30,
         "exstatus":1
       },
       "module":"music.web_singer_info_svr"
@@ -45,7 +44,7 @@ function createGetMusicList(album_mid){
 
 /**生成歌曲文件地址*/
 function createGetMusicFileUrl(songmid,vkey) {
-  let url="http://111.202.98.144/amobile.music.tc.qq.com/C400"+songmid+".m4a?guid=9429749972&vkey="+vkey+"&uin=0&fromtag=66";
+  let url="http://isure.stream.qqmusic.qq.com/C400"+songmid+".m4a?guid=9429749972&vkey="+vkey+"&uin=0&fromtag=66";
   return url;
 }
 /**获取到songkey后的回调
@@ -54,7 +53,8 @@ function dealSongVkey(songvkey,info) {
     let vkey=songvkey.req_0.data.midurlinfo[0].vkey;
     let songmid=songvkey.req_0.data.midurlinfo[0].songmid;
     //let url=createGetMusicFileUrl(songmid, vkey);//歌曲文件地址
-   let url=songvkey.req.data.freeflowsip[1]+songvkey.req_0.data.midurlinfo[0].purl;//有时文件地址域名不同，所以使用拼接
+    let url=songvkey.req.data.freeflowsip[1]+songvkey.req_0.data.midurlinfo[0].purl;
+
 
   request({url,encoding:null},function (err,response,body) {
       write.writeFile(dataDirPath+info.albumName+"/",info.songName,"m4a",body,function (err) {
@@ -135,8 +135,10 @@ function getMusicList(musicInfo){
  * run in getAlbumList
  * */
 function loopDealAlbum(albumList) {
-   albumList.forEach((item,index)=>{//循环专辑创建专辑文件夹
+  albumList.forEach((item,index)=>{//循环专辑创建专辑文件夹
+
        if(true){
+         //read.getData(createGetMusicList(item.album_mid),getMusicList);
          write.makeDirectory(dataDirPath,item.album_name,(err)=>{
            if(err){
              //console.log(err);
@@ -158,6 +160,5 @@ function getAlbumList(albumInfo){
   let albumList=albumInfo.singerAlbum.data.list;
   loopDealAlbum(albumList);
 };
-
 
 read.getData(createGetAlbumUrl(singermid),getAlbumList);
