@@ -5,9 +5,10 @@ let dataDirPath="E://personalfile/node/crawl/src/data/";
 let mkDirCount=0;
 let fileCount=0;
 let sucCount=0;
-
 let singermid="0025NhlN2yWrP4";//周杰伦
-/**生成获取专辑信息列表的地址
+
+/**
+ * 生成获取专辑信息列表的地址
  * @param singermid 区分歌手的标识
  * */
 function createGetAlbumUrl(singermid){
@@ -33,7 +34,8 @@ function createGetAlbumUrl(singermid){
   return url;
 };
 
-/**生成获取对应专辑下歌曲信息列表的地址
+/**
+ * 生成获取对应专辑下歌曲信息列表的地址
  * @param album_mid  专辑id
  * */
 function createGetMusicList(album_mid){
@@ -42,12 +44,23 @@ function createGetMusicList(album_mid){
 }
 
 
-/**生成歌曲文件地址*/
-function createGetMusicFileUrl(songmid,vkey) {
-  let url="http://111.202.98.144/amobile.music.tc.qq.com/C400"+songmid+".m4a?guid=9429749972&vkey="+vkey+"&uin=0&fromtag=66";
+/**
+ * 生成歌曲文件地址
+ * @param http  链接前缀 例：http://111.202.98.144/amobile.music.tc.qq.com
+ * @param songmid 歌曲的标识
+ * @param vkey  关键信息
+ * */
+function createGetMusicFileUrl(http,songmid,vkey) {
+  /*
+    let url="http://111.202.98.144/amobile.music.tc.qq.com/C400"+songmid+".m4a?guid=9429749972&vkey="+vkey+"&uin=0&fromtag=66";
+  */
+  let url=http+"C400"+songmid+".m4a?guid=9429749972&vkey="+vkey+"&uin=0&fromtag=66";
   return url;
 }
-/**获取到songkey后的回调
+/**
+ * 获取到songkey后的回调
+ * @param songvkey  获取歌曲的关键信息，包含vkey等其他信息
+ * @param info 歌曲的基本信息,从循环出的每条歌曲信息中获取
  * */
 function dealSongVkey(songvkey,info) {
     let vkey=songvkey.req_0.data.midurlinfo[0].vkey;
@@ -69,7 +82,10 @@ function dealSongVkey(songvkey,info) {
         })
       });
 }
-/*找vkey的地址  */
+/**
+ * 找vkey的地址
+ * @param songmid 歌曲的标识
+ * */
 function createGetVkeyUrl(songmid) {
   let json={
     "req":{
@@ -109,37 +125,42 @@ function createGetVkeyUrl(songmid) {
   return url;
 }
 
-/**循环处理获取到的歌曲列表
+/**
+ * 循环处理获取到的歌曲列表
  * run in getMusicList
+ * @param musicList 获取到的歌曲列表
  * */
 function loopDealMusic(musicList) {
   fileCount+=musicList.length;
   musicList.forEach((item,index)=>{
     let info={
       albumName:item.albumname,
-      songName:item.songname
+      songName:item.songname,
     };
-    read.getData(createGetVkeyUrl(item.songmid),function(songvkey){dealSongVkey(songvkey,info)});
+    read.getData(createGetVkeyUrl(item.songmid),songvkey=>{dealSongVkey(songvkey,info)});
   })
 }
-/**获取歌曲信息后抽出歌曲列表
+/**
+ * 获取歌曲信息后抽出歌曲列表
  * run in loopDealAlbum
+ * @param musicInfo 获取到专辑的歌曲信息，包含歌曲列表
  * */
 function getMusicList(musicInfo){
   let musicList=musicInfo.data.list;
   loopDealMusic(musicList);
 }
 
-/**循环专辑进行处理
+/**
+ * 循环专辑进行处理
  * run in getAlbumList
+ * @param albumList 获取到的专辑列表
  * */
 function loopDealAlbum(albumList) {
    albumList.forEach((item,index)=>{//循环专辑创建专辑文件夹
-       if(true){
+       if(index==7){
          write.makeDirectory(dataDirPath,item.album_name,true,(err)=>{
            if(err){
-             //console.log(err);
-
+             console.log(err);
            }else {
              mkDirCount++;
              if(mkDirCount==albumList.length){
@@ -152,9 +173,14 @@ function loopDealAlbum(albumList) {
        }
    })
 }
-/*定义处理获取到专辑信息后的事情*/
+/**
+ * 定义处理获取到专辑信息后的事情
+ * @param albumInfo 获取到歌手的专辑信息，包含专辑列表
+ * */
 function getAlbumList(albumInfo){
   let albumList=albumInfo.singerAlbum.data.list;
   loopDealAlbum(albumList);
 };
+
+
 read.getData(createGetAlbumUrl(singermid),getAlbumList);
