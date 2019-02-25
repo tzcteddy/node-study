@@ -1,4 +1,4 @@
-####使用手册
+#### 使用手册
 
 第一步：安装依赖
 
@@ -14,4 +14,4 @@
     node main.js  //从专辑获取
     node singleMusicList.js    //从单曲中获取
     
- ![pic](./screen/active.jpg,"ok")
+![style](./screenshots/style.jpg)
