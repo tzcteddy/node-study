@@ -529,26 +529,26 @@
 - 1、创建目录
 
     
-    【异步】
-    fs.mkdir(path,[mode],callback)
-    参数：
-    path:必须，指定需要被创建的目录完整路径及目录名
-    mode:非必须，默认0777
-    callback:必须，function(err){}
-    【同步】
-    fs.mkdirSync(path,[mode])
+        【异步】
+        fs.mkdir(path,[mode],callback)
+        
+        path:必须，指定需要被创建的目录完整路径及目录名
+        mode:非必须，默认0777
+        callback:必须，function(err){}
+        【同步】
+        fs.mkdirSync(path,[mode])
     
 - 2、读取目录
 
     
-    【异步】
-    fs.readdir(path,callback)
-    参数：
-    path:必须，指定需要被创建的目录完整路径及目录名
-    callback:function(err,files){}
-        files:数组，存放了读取到的文件中的所有文件名 
-    【同步】
-    fs.readdirSync(path)
+        【异步】
+        fs.readdir(path,callback)
+        
+        path:必须，指定需要被创建的目录完整路径及目录名
+        callback:function(err,files){}
+            files:数组，存放了读取到的文件中的所有文件名 
+        【同步】
+        fs.readdirSync(path)
     
     
 #### 5.3、查看与修改文件或目录的信息
