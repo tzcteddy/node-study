@@ -370,7 +370,188 @@
     第三个参数用于指定从复制源Buffer对象中获取数据时的开始位置，默认为0，即从复制源的第一个字节开始获取；
     第四个参数用于指定从复制源Buffer中获取数据时的结束位置，默认是复制源Buffer对象的长度。
         
+ #### 4.6、Buffer类的类方法
+ 
+ - 1、isBuffer方法
+ > 判断一个对象是否为一个Buffer对象，为Buffer返回true
+ 
+    使用方法：
+      Buffer.isBuffer(obj)
+ - 2、byteLength方法
+ > 使用此方法计算一个指定字符串的字节数
+ 
+    使用方法：
+        Buffer.byteLength(str,[encoding])
+        str:必须，要计算字节数的字符串
+        encoding:非必须，编码格式，默认utf8
+ - 3、concat方法
+ > 用于将几个Buffer对象结合创建一个新的Buffer对象
+ 
+    使用方法：
+        Buffer.concat(list,[totalLength])
+        list:必须，一个存放了多个Buffer对象的数组
+        totalLength:非必须，指定被创建的Buffer对象的总长度，省略时为数组中Buffer对象的合计值
+ - 4、isEncoding方法
+ > 该方法用于检测一个字符串是否为一个有效编码的格式的字符串
+ 
+    使用方法：
+        Buffer.isEncoding(str);
+        str:必须，指定被检测的字符串
+        该字符串是有效编码格式的字符串则返回true
  
     
     
-        
+### 五、在Node.js中操作文件系统
+> 
+#### 5.1、对文件执行读写操作
+
+- 1、文件的完整读写
+             
+     
+    异步【读】：   
+    fs.readFile(filename,[option],callback)
+    
+    filename:必须，指定读取文件的完整文件路径及文件名；
+    option:非必须，对象
+       flag:指定对该文件执行什么操作
+       encoding:指定使用何种编码格式来读取文件
+    callback:必须，function(err,data){}
+    
+    同步【读】：
+    fs.readFileSync(filename,[option])
+    
+    异步【写】
+    fs.writeFile(filename,data,[encoding],callback)
+    filename:必须，指定需要被写入文件的完整路径及文件名
+    data:必须，指定写入的内容，可以为一个字符串或一个Buffer对象
+    option:非必须，对象
+        flag:指定对该文件执行什么操作,默认"w"
+        mode:指定文件被打开时对该文件的读写权限，默认值0666(可读写)
+            第一个数必须是0
+            第二个数用于规定文件或目录所有者的权限
+            第三个数规定文件或目录所有者所属用户组的权限
+            第四个数规定其他人的权限
+            1：执行权限
+            2：写权限
+            4：读权限
+            符合权限相加即可，例如读写权限4+2=6；
+        encoding：指定使用何种编码格式来写入文件
+    callback:function(err){}
+    
+    同步【写】
+    fs.writeFileSync(filename,data,[encoding])
+    
+    在将一个字符串回一个缓存区中的数据追加到文件底部时
+    异步【追加】
+    fs.appendFile(filename,data,[encoding],callback)
+    
+    flag值默认为"a"
+    
+    同步【追加】
+    fs.appendFileSync(filename,data,[encoding])
+    
+- flag的值
+
+|flag值|意思|  
+| --- | --- |
+|"r"|读取文件，如果文件不存在则抛出异常|
+|"r+"|读取并写入文件，如果文件不存则抛出异常|
+|"rs"|以同步方式读取文件并通知操作系统忽略本地文件系统缓存，问价不存在抛出异常，对性能有一定影响|
+|"w"|写入文件，如果文件不存在则创建该文件，如果文件存在则清空文件内容|
+|"wx"|作用与"w"类似，但是以排他方式写入|
+|"w+"|读取并写入文件，如果文件不存在则创建该文件，如果文件存在则清空文件内容|
+|"wx+"|作用与"w+"类似，但是以排他方式写入|
+|"a"|追加写入文件，如果文件不存在则创建文件|
+|"ax"|作用与"a"类似，但是以排他方式写入|
+|"a+"|读取并追加写入文件，如果文件不存在则创建该文件|
+|"ax+"|作用与"a+"类似，但是以排他方式写入|
+
+- 2、从指定位置读写文件
+
+    
+    异步【打开文件】
+    fs.open(filename,flags,[mode],callback)
+    
+    filename:必须
+    flags:必须
+    mode:非必须
+    callback:function(err,fd){}
+        err:错误对象
+        fd:一个整数值，代表打开文件时返回的文件的描述符
+    
+    同步【打开文件】
+    fs.openSync(filename,flags,[mode])
+    
+    打开文件后，可以在回调函数中使用fs的read方法或readSync方法从文件的指定位置读取文件；
+    也可以使用fs的write方法或writeSync方法从文件的指定处开始写入数据。
+    
+    【read方法】：该方法从文件指定位置处读取文件，一直读到文件底部，然后将读取到的内容输出到一个缓存区中。
+    fs.read(fd,buffer,offset,length,position,callback)
+    
+    fd:必须，open方法回调函数中或openSync返回的文件描述符
+    buffer:必须，参数值为一个Buffer对象，用于指定将文件数据读取到哪个缓存区中；
+    offset:必须，整数，用于指定向缓存区中写入数据时的开始写入位置（以字节为单位）；
+    length:必须，整数，指定从文件中读取的字节数；
+    position:必须，整数，指定读取文件时的开始位置（以字节为单位）；
+    callback:function(err,bytesRead,buffer){}
+        bytesRead:整数值，代表实际读取的字节数（由于文件开始读取的位置+指定读取的字节数可能大于文件长度）
+        buffer:代表被读取的缓存区的对象
+      【同步】  
+     fs.readSync(fd,buffer,offset,lenth,position),返回bytesRead;
+     
+     【write方法】:该方法从一个缓存区中读取数据并从文件的指定处开始写入这些数据
+     fs.write(fd,buffer,offset,length,position,callback)
+    fd:open方法回调函数中或openSync返回的文件描述符
+    buffer:用于指定从哪个缓存区中读取数据
+    offset:用于指定从缓存区中读取数据时的开始位置（以字节为单位）
+    length:用于指定从缓存区中读取的字节数
+    position:用于指定写入文件时的开始位置
+    callback:function(err,written,buffer){]
+        written:整数值，代表被写入的字节数；
+        buffer:代表被读取的缓存区的对象
+    
+     【同步】
+    fs.writeSync(fd,buffer,offset,length,position)
+    
+    对文件读写操作完成后，我们通常要关闭文件，尤其以排他方式被打开时
+    
+    异步【关闭文件】
+    fs.close(fd,[callback])
+    fd：必须为open方法回调函数中或openSync返回的文件描述符
+    
+    同步【关闭文件】
+    fs.closeSync(fd)
+    
+#### 5.2、创建与读取目录
+
+- 1、创建目录
+
+    
+    【异步】
+    fs.mkdir(path,[mode],callback)
+    
+    path:必须，指定需要被创建的目录完整路径及目录名
+    mode:非必须，默认0777
+    callback:必须，function(err){}
+    【同步】
+    fs.mkdirSync(path,[mode])
+    
+- 2、读取目录
+
+    
+    【异步】
+    fs.readdir(path,callback)
+    
+    path:必须，指定需要被创建的目录完整路径及目录名
+    callback:function(err,files){}
+        files:数组，存放了读取到的文件中的所有文件名
+    
+    【同步】
+    fs.readdirSync(path)
+    
+    
+#### 5.3、查看与修改文件或目录的信息
+
+    
+   
+
