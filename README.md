@@ -324,22 +324,22 @@
 - 1、Buffer对象的toString方法
 
 
-     buf.toString([encoding],[start],[end])
-    在Buffer的toString方法中可以使用三个可选参数，其中第一个用于指定Buffer对象中保存的文字编码格式，默认是utf8；第二个及第三个用于指定被转换数据的起始位置与终止位置，以字节为单位。
+        buf.toString([encoding],[start],[end])
+        在Buffer的toString方法中可以使用三个可选参数，其中第一个用于指定Buffer对象中保存的文字编码格式，默认是utf8；第二个及第三个用于指定被转换数据的起始位置与终止位置，以字节为单位。
 - 2、Buffer对象的write方法
 
 
-    buf.write(string,[offset],[length],[encoding])
-    在Buffer的write方法中使用四个参数，其中一个参数为必须指定参数，指定需要写入的字符串，后三个为可选参数；第二个参数offset与第三个参数length用于指定字符串转换为字节数据后的写入位置，字节数据的书写位置为从第1+offset个字节开始到offset+length个字节为止；
-    第四个参数指定写入字符串时使用的编码格式，默认为utf8格式。
+        buf.write(string,[offset],[length],[encoding])
+        在Buffer的write方法中使用四个参数，其中一个参数为必须指定参数，指定需要写入的字符串，后三个为可选参数；第二个参数offset与第三个参数length用于指定字符串转换为字节数据后的写入位置，字节数据的书写位置为从第1+offset个字节开始到offset+length个字节为止；
+        第四个参数指定写入字符串时使用的编码格式，默认为utf8格式。
 
 - 3、StringDecoder
 
 
-    var StringDecoder=require("string_decoder").StringDecoder;
-    var decoder=new StringDecoder([encoding])
-    decoder.write(buffer);
-    StringDecoder对象的write方法，可以使用一个参数，用于指定需要被转换的Buffer对象，该方法返回转换后的字符串。
+        var StringDecoder=require("string_decoder").StringDecoder;
+        var decoder=new StringDecoder([encoding])
+        decoder.write(buffer);
+        StringDecoder对象的write方法，可以使用一个参数，用于指定需要被转换的Buffer对象，该方法返回转换后的字符串。
 #### 4.4、Buffer对象与数值对象之间的互相转换
 
 #### 4.5、Buffer对象与JSON对象之间的互相转换
@@ -517,8 +517,8 @@
     
     异步【关闭文件】
     fs.close(fd,[callback])
+    参数：
     fd：必须为open方法回调函数中或openSync返回的文件描述符
-    
     同步【关闭文件】
     fs.closeSync(fd)
     
@@ -529,7 +529,7 @@
     
     【异步】
     fs.mkdir(path,[mode],callback)
-    
+    参数：
     path:必须，指定需要被创建的目录完整路径及目录名
     mode:非必须，默认0777
     callback:必须，function(err){}
@@ -541,11 +541,10 @@
     
     【异步】
     fs.readdir(path,callback)
-    
+    参数：
     path:必须，指定需要被创建的目录完整路径及目录名
     callback:function(err,files){}
-        files:数组，存放了读取到的文件中的所有文件名
-    
+        files:数组，存放了读取到的文件中的所有文件名 
     【同步】
     fs.readdirSync(path)
     
