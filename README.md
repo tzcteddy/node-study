@@ -408,47 +408,47 @@
 - 1、文件的完整读写
              
      
-    异步【读】：   
-    fs.readFile(filename,[option],callback)
+        异步【读】：   
+        fs.readFile(filename,[option],callback)
     
-    filename:必须，指定读取文件的完整文件路径及文件名；
-    option:非必须，对象
-       flag:指定对该文件执行什么操作
-       encoding:指定使用何种编码格式来读取文件
-    callback:必须，function(err,data){}
+        filename:必须，指定读取文件的完整文件路径及文件名；
+        option:非必须，对象
+            flag:指定对该文件执行什么操作
+            encoding:指定使用何种编码格式来读取文件
+        callback:必须，function(err,data){}
     
-    同步【读】：
-    fs.readFileSync(filename,[option])
+        同步【读】：
+        fs.readFileSync(filename,[option])
     
-    异步【写】
-    fs.writeFile(filename,data,[encoding],callback)
-    filename:必须，指定需要被写入文件的完整路径及文件名
-    data:必须，指定写入的内容，可以为一个字符串或一个Buffer对象
-    option:非必须，对象
-        flag:指定对该文件执行什么操作,默认"w"
-        mode:指定文件被打开时对该文件的读写权限，默认值0666(可读写)
-            第一个数必须是0
-            第二个数用于规定文件或目录所有者的权限
-            第三个数规定文件或目录所有者所属用户组的权限
-            第四个数规定其他人的权限
-            1：执行权限
-            2：写权限
-            4：读权限
-            符合权限相加即可，例如读写权限4+2=6；
-        encoding：指定使用何种编码格式来写入文件
-    callback:function(err){}
+        异步【写】
+        fs.writeFile(filename,data,[encoding],callback)
+        filename:必须，指定需要被写入文件的完整路径及文件名
+        data:必须，指定写入的内容，可以为一个字符串或一个Buffer对象
+        option:非必须，对象
+            flag:指定对该文件执行什么操作,默认"w"
+            mode:指定文件被打开时对该文件的读写权限，默认值0666(可读写)
+                第一个数必须是0
+                第二个数用于规定文件或目录所有者的权限
+                第三个数规定文件或目录所有者所属用户组的权限
+                第四个数规定其他人的权限
+                1：执行权限
+                2：写权限
+                4：读权限
+                符合权限相加即可，例如读写权限4+2=6；
+            encoding：指定使用何种编码格式来写入文件
+        callback:function(err){}
     
-    同步【写】
-    fs.writeFileSync(filename,data,[encoding])
+        同步【写】
+        fs.writeFileSync(filename,data,[encoding])
     
-    在将一个字符串回一个缓存区中的数据追加到文件底部时
-    异步【追加】
-    fs.appendFile(filename,data,[encoding],callback)
+        在将一个字符串回一个缓存区中的数据追加到文件底部时
+        异步【追加】
+        fs.appendFile(filename,data,[encoding],callback)
     
-    flag值默认为"a"
+        flag值默认为"a"
     
-    同步【追加】
-    fs.appendFileSync(filename,data,[encoding])
+        同步【追加】
+        fs.appendFileSync(filename,data,[encoding])
     
 - flag的值
 
@@ -469,58 +469,60 @@
 - 2、从指定位置读写文件
 
     
-    异步【打开文件】
-    fs.open(filename,flags,[mode],callback)
+        异步【打开文件】
+        fs.open(filename,flags,[mode],callback)
     
-    filename:必须
-    flags:必须
-    mode:非必须
-    callback:function(err,fd){}
-        err:错误对象
-        fd:一个整数值，代表打开文件时返回的文件的描述符
+        filename:必须
+        flags:必须
+        mode:非必须
+        callback:function(err,fd){}
+            err:错误对象
+            fd:一个整数值，代表打开文件时返回的文件的描述符
     
-    同步【打开文件】
-    fs.openSync(filename,flags,[mode])
+        同步【打开文件】
+        fs.openSync(filename,flags,[mode])
     
-    打开文件后，可以在回调函数中使用fs的read方法或readSync方法从文件的指定位置读取文件；
-    也可以使用fs的write方法或writeSync方法从文件的指定处开始写入数据。
+        打开文件后，可以在回调函数中使用fs的read方法或readSync方法从文件的指定位置读取文件；
+        也可以使用fs的write方法或writeSync方法从文件的指定处开始写入数据。
     
-    【read方法】：该方法从文件指定位置处读取文件，一直读到文件底部，然后将读取到的内容输出到一个缓存区中。
-    fs.read(fd,buffer,offset,length,position,callback)
+        【read方法】：该方法从文件指定位置处读取文件，一直读到文件底部，然后将读取到的内容输出到一个缓存区中。
+        fs.read(fd,buffer,offset,length,position,callback)
     
-    fd:必须，open方法回调函数中或openSync返回的文件描述符
-    buffer:必须，参数值为一个Buffer对象，用于指定将文件数据读取到哪个缓存区中；
-    offset:必须，整数，用于指定向缓存区中写入数据时的开始写入位置（以字节为单位）；
-    length:必须，整数，指定从文件中读取的字节数；
-    position:必须，整数，指定读取文件时的开始位置（以字节为单位）；
-    callback:function(err,bytesRead,buffer){}
-        bytesRead:整数值，代表实际读取的字节数（由于文件开始读取的位置+指定读取的字节数可能大于文件长度）
-        buffer:代表被读取的缓存区的对象
-      【同步】  
-     fs.readSync(fd,buffer,offset,lenth,position),返回bytesRead;
+        fd:必须，open方法回调函数中或openSync返回的文件描述符
+        buffer:必须，参数值为一个Buffer对象，用于指定将文件数据读取到哪个缓存区中；
+        offset:必须，整数，用于指定向缓存区中写入数据时的开始写入位置（以字节为单位）；
+        length:必须，整数，指定从文件中读取的字节数；
+        position:必须，整数，指定读取文件时的开始位置（以字节为单位）；
+        callback:function(err,bytesRead,buffer){}
+            bytesRead:整数值，代表实际读取的字节数（由于文件开始读取的位置+指定读取的字节数可能大于文件长度）
+            buffer:代表被读取的缓存区的对象
+        【同步】  
+        fs.readSync(fd,buffer,offset,lenth,position),返回bytesRead;
      
-     【write方法】:该方法从一个缓存区中读取数据并从文件的指定处开始写入这些数据
-     fs.write(fd,buffer,offset,length,position,callback)
-    fd:open方法回调函数中或openSync返回的文件描述符
-    buffer:用于指定从哪个缓存区中读取数据
-    offset:用于指定从缓存区中读取数据时的开始位置（以字节为单位）
-    length:用于指定从缓存区中读取的字节数
-    position:用于指定写入文件时的开始位置
-    callback:function(err,written,buffer){]
-        written:整数值，代表被写入的字节数；
-        buffer:代表被读取的缓存区的对象
+        【write方法】:该方法从一个缓存区中读取数据并从文件的指定处开始写入这些数据
+        fs.write(fd,buffer,offset,length,position,callback)
+        
+        fd:open方法回调函数中或openSync返回的文件描述符
+        buffer:用于指定从哪个缓存区中读取数据
+        offset:用于指定从缓存区中读取数据时的开始位置（以字节为单位）
+        length:用于指定从缓存区中读取的字节数
+        position:用于指定写入文件时的开始位置
+        callback:function(err,written,buffer){]
+            written:整数值，代表被写入的字节数；
+            buffer:代表被读取的缓存区的对象
     
-     【同步】
-    fs.writeSync(fd,buffer,offset,length,position)
+        【同步】
+        fs.writeSync(fd,buffer,offset,length,position)
     
-    对文件读写操作完成后，我们通常要关闭文件，尤其以排他方式被打开时
+        对文件读写操作完成后，我们通常要关闭文件，尤其以排他方式被打开时
     
-    异步【关闭文件】
-    fs.close(fd,[callback])
-    参数：
-    fd：必须为open方法回调函数中或openSync返回的文件描述符
-    同步【关闭文件】
-    fs.closeSync(fd)
+        异步【关闭文件】
+        fs.close(fd,[callback])
+
+        fd：必须为open方法回调函数中或openSync返回的文件描述符
+        
+        同步【关闭文件】
+        fs.closeSync(fd)
     
 #### 5.2、创建与读取目录
 
