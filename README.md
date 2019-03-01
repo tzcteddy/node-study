@@ -722,10 +722,78 @@
         fs.unlinkSync(path);
         
 - 3、创建与查看符号链接
+> 在操作系统中，可以为文件或目录创建一个或多个符号链接。所谓符号链接：是一种特殊的文件，这个文件中仅包含了另一个文件或目录的路径及文件名或目录名。如果打开一个文件的符号链接文件进行编辑，操作系统将自动打开符号连接中所指向的原文件进行编辑；如果打开一个目录的符号链接文件进行文件的创建、编辑或删除操作，操作系统将自动打开符号连接中所指向的远目录并执行相应的操作；如果删除符号链接文件，不会删除原文件或目录；如果删除或移动原文件或目录，符号链接也不会被删除，这时产生一种成为“断链”的现象。在fs中使用symlink方法来创建文件或目录的符号链接。
 
+
+        使用方法：
+        fs.symlink(srcpath,dstpath,[type],callback);
+        
+        srcpath：用于指定需要被创建符号链接文件或目录的完整路径及文件名或目录名；
+        dstpath：用于指定被创建的符号连接的完整路径及文件名；
+        type：用于指定为文件创建符号连接还是为目录创建符号链接，默认file,可指定为file(为文件创建符号链接)、dir(为目录创建符号连接，非windows操作系统只能使用dir)以及junction（为目录创建，只在windows有效）;
+        callback:function(err){}
+        
+        【同步】
+        fs.synlinkSync(srcpath,dstpath,[type]);
+        
+        创建了符号连接后，可以使用fs模块中的readlink方法读取符号连接中所包含的另一个文件或目录的路径及文件名或目录名；
+        fs.readlink(path,callback);
+        
+        path：指定符号链接的路径及文件名；
+        callback：function(err,linkString){}
+            linkString:读取到的一个链接的字符串，其中包含了另一个文件或目录的路径及文件名或目录名；
+            
+         【同步】
+         var linkString=fs.readlinkSync(path);
+         
+       
 - 4、截断文件
-- 5、删除空目录
-- 6、监视文件或目录
-    
-   
+> 在fs模块中，可以使用truncate方法对文件进行截断操作（是指一种首选清除文章内容，然后修改文件尺寸的操作）
 
+
+        使用方法：
+        fs.truncate(filename,len,callback);
+        
+        filename：用于指定需要被截断文件的完整文件路径及文件名；
+        len：为一个整数值，指定被截断后文件的尺寸（以字节为单位）；
+        callback:function(err){}
+        
+        【同步】
+        fs.truncateSync(filename,len);
+        
+        在使用open方法或openSync方法打开文件并返回文件描述符后，可以使用ftruncate方法截断文件；
+        
+        fs.ftruncate(fd,len,callback);
+        
+        【同步】
+        fs.ftruncateSync(fd,len);
+     
+- 5、删除空目录
+> 在fs模块中，可以使用rmdir方法删除空目录
+
+
+        使用方法：
+        fs.rmdir(path,callback);
+        
+        path：参数用于指定需要被删除目录的完整路径及目录名;
+        callback：function(err){};
+        
+        【同步】
+        fs.rmdirSync(path);
+- 6、监视文件或目录
+> 在fs模块中使用watchFile方法对文件进行监视，并且在监视到文件被修改时执行某些处理
+
+
+        使用方法：
+        fs.watchFile(filename,[options],listener);
+        
+        filename：指定需要被监视的文件的完整路径及文件名。
+        options：对象，可以使用布尔值的persistent属性值来指定当指定了被监视的文件后是否停止当前正在运行的应用程序，默认值为true；也可以使用一个整数类型的interval属性来指定每隔多少毫秒监视一次文件是否发生改变以及发生什么改变；
+        listener：function(curr,prev){}指定当被监视的文件发生改变时调用的回调函数
+            curr：参数为一个fs.Stats对象，代表被修改之后的当前文件；
+            prev：也是一个fs.Stats对象，代表被修改之前的当前文件；
+    
+        当使用watchFile监视后，使用unwatchFile取消当文件发生改变时所要执行的处理
+        fs.unwatchFile(filename,[listener]);
+        
+            
