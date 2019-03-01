@@ -553,6 +553,179 @@
     
 #### 5.3、查看与修改文件或目录的信息
 
+- 1、查看文件或目录的信息
+> 在fs模块中，可以使用stat方法或lstat方法查看一个文件或目录的信息。
+这两个方法的唯一区别是当查看符号链接文件的信息时，必须使用lstat方法。
+
+
+        使用方法：
+        fs.stat(path,callback);
+        fs.lstat(path,callback);
+        
+        path:指定需要被查看的文件或目录的完整路径及文件名或目录名；
+        callback: function(err,stats){}指定查看操作完毕时执行的回调
+            stats:是一个fs.Stats对象，该对象拥有以下方法，不需要参数
+            该对象的方法：
+            1、isFile：用于判断被查看的对象是否为一个文件，如果是返回true，反之返回false;
+            2、isDirectory：用于判断被查看对象是否为一个目录，如果是返回true，反之返回false；
+            3、isBlockDevice：用于判断被查看到的文件是否为一个块设备文件，如果是返回true，反之返回false；仅在UNIX操作系统下有效；
+            4、isCharacterDevice：用于判断被查看的文件是否为一个字符设备文件，如果是返回true，反之返回false；仅在UNIX操作系统下有效；
+            5、isSymbolicLink：用于判断被查看的文件是否为一个符号链接文件，如果是返回true，反之返回false；该方法仅在lstat方法的回调中有效；
+            6、isFIFO：用于判断被查看的文件是否为一个FIFO文件，如果是返回true,反之返回false；仅在UNIX操作系统下有效；
+            7、isSocket：用于判断被查看的文件是否为一个socket文件，如果是返回true，反之返回false；尽在UNIX操作系统下有效；
+            该对象的属性：
+            8、dev：文件或目录所在设备的ID，仅在UNIX操作系统下有效；
+            9、ino：文件或目录的索引编号，仅在UNIX操作系统下有效；
+            10、mode：使用数值形式代表的文件或目录的权限标志；
+            11、nlink：文件或目录的硬链接数量；
+            12、uid：文件或目录的所有者的用户ID，仅在UNIX操作系统下有效；
+            13、gid：文件或目录的所有者的组ID，仅在UNIX操作系统下有效；
+            14、size：文件尺寸（文件中的字节数）；
+            15、atime：文件的访问时间；
+            16、mtime：文件的修改时间；
+            17、ctime：文件的创建时间；
+            
+        var stats=fs.statSync(path); 
+        var stats=fs.lstatSync(path);
+        
+        在使用open方法或openSync方法打开文件并返回文件描述符后，可使用fs模块的fstat方法查询被打开的文件信息
+        
+        fs.fstat(fd,callback);
+        
+        fd：必须为打开文件时返回的文件描述符；
+        callback： function(err,stats){}回调函数与stats一样；
+        
+        【同步】
+        val stats=fs.fstatSync(fd);
+        
+        
+        
+- 2、检查文件或目录是否存在
+> 在fs模块中，可以使用exists方法检查一个文件或目录是否存在；
+
+
+        
+            
+        使用放法：
+        fs.exists(path,callback);
+        
+        path:完整路径及文件名和目录名；
+        callback：function(exists){}，文件存在时，exists为true；
+        
+        【同步】
+        fs.existsSync(path);
+        
+        
+- 3、获取文件或目录的绝对路径
+> 在fs模块中，可以使用realpath方法获取一个文件或目录的绝对路径
+
+
+
+        使用方法：
+        realpath(path,[cache],callback);
+        
+        path:必须，完整路径及文件名或目录名；
+        cache:非必须，对象，存放了一些预先指定的路径
+            例子：
+            var cache={'/etc':'/pricate/etc'};
+            fs.realpath('/etc/passw',cache,function(err,resolvedPath){});
+        callback:必须，
+            resolcePath:获取到的文件或目录的绝对路径；
+        
+        【同步】 
+        var realPath=fs.realpathSync(path,[cache]);
+        
+        
+- 4、修改文件访问时间及修改时间
+> 在fs模块中，可以使用utimes方法修改文件的访问时间及修改时间。
+
+    
+        使用方法：
+        fs.utimes(path,atime,mtime,callback);
+        
+        path：必须，指定需要被修改时间的文件的完整路径及文件名；
+        atime：必须， 指定修改后的访问时间；
+        mtime：必须，指定修改后的修改时间；
+        callback:必须，function(err){} 
+        
+        【同步】
+        fs.utimesSync(path,atime,mtime);  
+        
+        
+        在open方法或openSync方法打开文件并返回文件描述符后，可以使用fs模块中的futimes方法修改访问时间或修改时间；
+        fs.futimes(fd,atime,mtime,callback);
+        
+        【同步】
+        fs.futimsSync(fd,atime,mtime);
+        
+        
+- 5、修改文件或目录的读写权限
+> 在fs模块中，可以使用chmod方法修改文件或目录的读写权限；
+
+
+        使用方法：
+        fs.chmode(path,mode,callback);
+        
+        path：指定需要被修改权限的文件的完整路径及文件名或目录名；
+        mode：指定修改后的文件的读写权限；
+        callback:function(err){};
+        
+        【同步】
+        fs.chmodSync(path,mode);
+        
+        在使用open方法或openSync方法打开文件并返回文件描述符，可以使用fs模块的fchmod方法修改文件的读写权限；
+        
+        fs.fchmod(fd,mode,callback);
+        
+        【同步】
+        fs.fchmodSync(fd,mode);
+        
+        
+        
+#### 5.4、可以对文件或目录执行的其他操作
+
+- 1、移动文件或目录
+> 在fs模块中，可以使用rename方法移动文件或目录，当移动后的路径与原路径为同一路径，而移动后的文件或目录名与原文件名或目录名不同时，则执行文件或目录的重命名操作；
+
+
+        使用方法：
+        fs.rename(oldPath,newPath,callback);
+        oldPath：指定被移动文件或目录的完整路径及文件名或目录名；
+        newPath：指定移动后文件或目录的完整路径及文件名或目录名；
+        callback:function(err){]
+        
+        【同步】
+        fs.renameSync(oldPath,newPath);
+- 2、创建与删除文件的硬链接
+> 硬链接：实际上是文件的一个或多个文件名。在操作系统中，一个文件被创建后就拥有了一个文件名，因此该文件的硬链接数量为1。但是我们可以通过某种特殊的操作为该文件再指定一个文件名。在对该文件创建一个硬链接后，虽然表面上看起来拥有了两个不同的文件，但是在用盘中这两个文件只不过是一个文件的多个硬链接，如果修改一个文件中的内容再打开另一个文件，就会看见另一个问价中的内容也被修改了。
+在fs中使用link方法创建文件的硬链接。
+
+
+        使用方法：
+        fs.link(srcpath,dstpath,callback);
+        
+        srcpath：用于指定需要被创建硬链接的文件的完整路径及文件名；
+        dstpath：用于指定被创建的硬链接的完整路径及文件名，该硬链接与原文件必须位于同一卷中；
+        callback：function(err){]
+        
+        【同步】
+        fs.linkSync(srcpath,dstpath);
+        
+        在fs中使用unlink方法删除文件的硬链接。在对文件创建多个硬链接后，这些硬链接互相独立，删除任何一个硬链接，其他的依然存在。但是如果删除的是最后一个硬链接，事实上就是彻底删除该文件的操作了；
+        
+        使用方法：
+        fs.unlink(path,callback);
+        path：用于指定被删除的硬链接的完整路径及文件名；
+        callback:function(err){};
+        
+        【同步】
+        fs.unlinkSync(path);
+        
+- 3、创建与查看符号链接
+
+- 4、截断文件
+- 5、删除空目录
+- 6、监视文件或目录
     
    
 
