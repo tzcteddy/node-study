@@ -796,4 +796,14 @@
         当使用watchFile监视后，使用unwatchFile取消当文件发生改变时所要执行的处理
         fs.unwatchFile(filename,[listener]);
         
+        另外，在fs模块终还可以使用watch方法对文件或目录进行监听，并且在监视到文件或目录被修改时执行某些处理
+        var watcher = fs.watch(filename,[options],[listener])
+        filename:指定需要监视的文件或目录的完整路径及文件名或目录名；
+        options:对象，persistent
+        listener：function(event,filename){}
+            event:参数值为"rename"（当被指定的文件或目录中的任何文件被重命名、移动或删除时）或"change"（当被指定的文件或目录中的任何文件内容发生改变时）；
+            filename:为任何发生改变的文件（可以是被指定的文件，也可以是被指定的目录中任何发生改变的文件）的完整路径及文件名
+        watch方法返回一个fs.FSWatcher对象，该对象拥有一个close方法，用于停止对watch方法中指定监听文件或目录所执行的操作.
+        watcher.close()
+        
             
